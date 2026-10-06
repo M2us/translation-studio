@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.01 - 2026-10-06
+
+### Added
+
+- Catalog row numbers that remain consistent while searching and sorting.
+- Multiple personal bookmarks with automatically saved notes, visible row flags and a bookmark list with previous/next navigation across tabs.
+- Bookmarks survive restarts without modifying game catalogs; unavailable records retain their notes and can be removed from the list.
+
 ## 1.0 - 2026-10-06
 
 Initial release.

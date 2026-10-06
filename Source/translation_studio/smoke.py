@@ -56,6 +56,14 @@ def main(root, report_path):
                 assert page.source_editor.isReadOnly()
                 assert not page.model.flags(page.model.index(0, 2)) & Qt.ItemFlag.ItemIsEditable
                 assert page.screenshots.items.count() > 0
+                assert not page.table.verticalHeader().isHidden()
+                assert page.proxy.headerData(0, Qt.Orientation.Vertical) == 1
+                first, second = (entry["id"] for entry in page.model.entries[:2])
+                state["bookmarks"] = (page.tab["id"], first, second)
+                w.set_bookmark(page.tab["id"], first, True, "Private bookmark smoke note")
+                w.set_bookmark(page.tab["id"], second, True, "Resume work")
+                assert not w.project.dirty and w.bookmark_choice.count() == 2
+                assert page.proxy.headerData(0, Qt.Orientation.Vertical, Qt.ItemDataRole.DecorationRole)
                 if "art" in w.pages:
                     art = w.pages["art"]
                     original = w.project.asset_side("art", art.current_id, "ru")["id"]
@@ -81,6 +89,13 @@ def main(root, report_path):
             elif state["step"] == 1:
                 print("English UI; starting action", flush=True)
                 assert "Save" in w.save_button.text()
+                tab, first, second = state["bookmarks"]
+                page = w.pages[tab]
+                assert page.bookmark_note.text() == "Private bookmark smoke note"
+                w.navigate_bookmark(1)
+                assert page.current_id == second
+                w.navigate_bookmark(-1)
+                assert page.current_id == first
                 w.grab().save(str(report_path.with_suffix(".en.png")))
                 w.profile["trustedActions"] = [trust_key(w.project)]
                 w.run_action(w.project.config["actions"][0])

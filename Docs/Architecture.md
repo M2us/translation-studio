@@ -17,6 +17,7 @@ The tested environment is Windows x64, Python 3.12, PySide6 6.11.2, jsonschema 4
 | `media.py` | PNG views, screenshot thumbnails/dialogs, PCM audio and queues |
 | `processes.py` | Action validation, worker IPC, Windows Job Objects, output decoding and cancellation |
 | `settings.py` | Portable profile and application paths |
+| `bookmarks.py` | Personal project keys and defensive normalization of profile bookmarks; no Qt or game-catalog writes |
 | `diagnostics.py` | Bounded application logs, safe events and exception/native-fault handling |
 | `theme.py` | Shared semantic colors, styles and SVG UI icons |
 | `i18n.py` | English/Russian message translations and project labels |
@@ -44,6 +45,8 @@ The application has no built-in ROM formats. The two example adapters intentiona
 Image browsing is separate from `selectedVariantId`. The GUI and adapters share `Project.asset_side()` to resolve the selected resource. Context screenshots and resource descriptions remain read-only. Related text is derived from the current model, including unsaved edits; it is not stored as a second editable translation.
 
 ## Persistence and concurrency
+
+Vertical table headers map proxy rows back to catalog rows, preserving displayed numbers under sorting/filtering. Bookmark identity uses the project folder, tab and stable entry ID, never a row number. `MainWindow` saves bookmark changes through the personal profile, maintains cross-tab navigation and preserves unavailable notes; `RecordPage` provides a flag and note editor independently of author translation notes. Bookmarks require no project schema changes or game integration work. See [StorageDiagnostics](StorageDiagnostics.md) for profile format and [UserGuide](UserGuide.md) for navigation behavior.
 
 Saving validates all dirty catalogs before writes. Each file is written through a temporary file, flushed and atomically replaced after an external-change check. This is not a cross-file transaction. A failure after some replacements reports those successes and keeps a recovery draft for the intended complete state. The previous snapshot represents the state before the whole attempt. See [StorageDiagnostics](StorageDiagnostics.md).
 

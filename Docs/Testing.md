@@ -26,6 +26,7 @@ Audio tests require an available Windows audio output and use QAudioSink. Do not
 | Partial saves, absent translations, action validation, cross-tab relations | `Tests/test_regressions.py` |
 | Character rules, screenshots, variants, mixed snapshots, help language, close/reopen behavior | `Tests/test_usability.py` |
 | English defaults with explicit Russian CLI/SDK diagnostics | `Tests/test_language_defaults.py` |
+| Catalog numbering under filters/sorts, bookmarks/notes across restarts and tabs, unavailable records and profile write failures | `Tests/test_bookmarks.py` |
 
 Tests simulate write failures and an isolated native crash. They do not simulate physical disk loss or guarantee persistence after power failure. Audio output checks do not assess voice quality by ear. Full test counts and timings vary; run the suite rather than relying on a historical count.
 
@@ -33,7 +34,7 @@ Tests simulate write failures and an isolated native crash. They do not simulate
 
 `Scripts/capture_design.py` captures this app on copied examples and an isolated profile. Inspect light/dark themes, minimum 1060×750 layout, relation panels, context images and alternatives. Check long names and DPI scaling when changing layout. Public README screenshots use English and a neutral display path; no source paths are changed to obtain them.
 
-For executable changes, follow [Distribution](Distribution.md): build, verify candidate, assemble/publish and verify the extracted ZIP. `verify_package.py` checks both synthetic adapters using copied projects and separate profiles, changes text, saves, selects an image variant, runs a builder, and verifies result bytes and bounded logs. It deliberately tests non-ASCII paths. `--smoke-test` is destructive to its input copy; never point it at a user project.
+For executable changes, follow [Distribution](Distribution.md): build, verify candidate, assemble/publish and verify the extracted ZIP. `verify_package.py` checks both synthetic adapters using copied projects and separate profiles, changes text, saves, selects an image variant, runs a builder, and verifies result bytes and bounded logs. It also checks catalog numbers, bookmark navigation after a UI-language rebuild, profile persistence and absence of bookmark notes in application logs. It deliberately tests non-ASCII paths. `--smoke-test` is destructive to its input copy; never point it at a user project.
 
 Machine-specific reports and screenshots belong in ignored `Work/QA`; private history belongs in ignored `Internal`. Neither is a public runtime dependency.
 

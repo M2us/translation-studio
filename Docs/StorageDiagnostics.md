@@ -21,6 +21,8 @@ Recovery does not replace external project backups. Builders never read it. Olde
 
 `Data/profile.json` beside the EXE stores theme, UI language, recent projects, action trust and Python path. Theme/language changes persist immediately. Source runs use `Data` in the repository root. `TRANSLATION_STUDIO_PROFILE` overrides the file for isolated tests.
 
+The same profile stores personal `bookmarks`: an object keyed by the resolved, case-insensitive game-folder path. Each value is a list of `{ "tab": "text", "entry": "stable-id", "note": "Personal note" }` records. There is one bookmark per tab/entry pair, independent of target language. Updates use the existing atomic profile writer and roll back the in-memory bookmark change on failure. No extra bookmark files, history or game-catalog edits are created. Missing records retain their notes until explicitly removed; duplicate/malformed profile bookmark items are ignored. Moving the game folder changes its bookmark key. Removing a recent-project shortcut preserves bookmarks, so reopening the same folder restores them. Personal notes are excluded from diagnostic events and release archives.
+
 A new empty portable profile may automatically import an existing `%LOCALAPPDATA%/TranslationStudio/profile.json`; the old file is preserved. Subsequent changes use the portable profile. Without a saved/imported language, English is selected. Release ZIPs contain no personal profile. The application directory must be writable.
 
 A second instance using the same profile is refused to protect shared settings/logs. A separate portable installation may open the same game, but the editor lock still prevents concurrent writes. `session.lock` is a fixed lock file, not another log.

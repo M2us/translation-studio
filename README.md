@@ -10,7 +10,9 @@ Each game supplies `Translation/project.json`. The editor and the game's builder
 
 ## Run
 
-**[Download for Windows — portable 1.0](https://github.com/M2us/translation-studio/releases/download/v1.0/Translation-Studio-Windows-Portable.zip)** · [All releases](https://github.com/M2us/translation-studio/releases) · [SHA-256 checksum](https://github.com/M2us/translation-studio/releases/download/v1.0/Portable-SHA256.txt)
+Version **1.01** adds catalog row numbers and personal bookmarks with notes. See [Changelog](CHANGELOG.md).
+
+**[Download for Windows — portable 1.01](https://github.com/M2us/translation-studio/releases/download/v1.01/Translation-Studio-Windows-Portable.zip)** · [All releases](https://github.com/M2us/translation-studio/releases) · [SHA-256 checksum](https://github.com/M2us/translation-studio/releases/download/v1.01/Portable-SHA256.txt)
 
 Extract the complete `Translation-Studio-Windows-Portable.zip` and run **TranslationStudio.exe**. Keep the whole folder, including `_internal` and the CLI. No Python installation is needed. The folder must be writable for its local settings and logs.
 
@@ -20,6 +22,7 @@ Source repository: [M2us/translation-studio](https://github.com/M2us/translation
 
 ## Features
 
+- Catalog row numbers and personal bookmarks with notes, automatic persistence and previous/next navigation across tabs.
 - Read-only originals, stable custom IDs, multiple target languages, search, filters and translator notes.
 - A comparison table and detailed editor with character, byte, line and token rules, including allowed/forbidden character sets.
 - Optional context screenshots and full sentences assembled from related fragments, including shared fragments.

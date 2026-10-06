@@ -2,16 +2,17 @@
 import html
 from urllib.parse import urlencode
 from PySide6.QtCore import Qt, QAbstractTableModel, QSortFilterProxyModel, QModelIndex
-from PySide6.QtGui import QColor, QKeySequence
+from PySide6.QtGui import QColor, QKeySequence, QIcon
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox,
     QTableView, QSplitter, QPlainTextEdit, QPushButton, QTextBrowser, QAbstractItemView, QHeaderView, QScrollArea,
-    QApplication, QToolButton)
+    QApplication, QToolButton, QCheckBox)
 from .core import StudioError, text_issues, selected_asset
 from .i18n import tr, label
 from .media import ImageCompare, ContextScreenshots
 from .rule_display import describe_rules, describe_issue
 from .theme import COLORS
 from . import diagnostics
+from .settings import app_root
 
 
 class RecordModel(QAbstractTableModel):
@@ -40,10 +41,21 @@ class RecordModel(QAbstractTableModel):
         return 5
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        if orientation == Qt.Orientation.Vertical:
+            if not 0 <= section < len(self.entries):
+                return None
+            if role == Qt.ItemDataRole.DisplayRole:
+                return section + 1
+            entry = self.entries[section]["id"]
+            bookmark = self.page.owner.bookmark(self.tab_id, entry)
+            if role == Qt.ItemDataRole.DecorationRole and bookmark:
+                return QIcon(str(app_root() / f"Assets/bookmark-{self.page.owner.theme}.svg"))
+            if role == Qt.ItemDataRole.ToolTipRole:
+                return tr("row_number", self.page.owner.language, number=section + 1) + (
+                    "\n" + tr("bookmark", self.page.owner.language) + ": " + bookmark["note"] if bookmark else "")
+            return None
         if role != Qt.ItemDataRole.DisplayRole:
             return None
-        if orientation == Qt.Orientation.Vertical:
-            return section + 1
         keys = ["ID", "source", "translation", "comment", "status"] if self.is_text else [
             "ID", "context", "source", "translation", "comment"]
         return keys[section] if keys[section] == "ID" else tr(keys[section], self.page.owner.language)
@@ -114,6 +126,12 @@ class RecordModel(QAbstractTableModel):
 
 
 class FilterModel(QSortFilterProxyModel):
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        if orientation == Qt.Orientation.Vertical:
+            index = self.mapToSource(self.index(section, 0))
+            return self.sourceModel().headerData(index.row(), orientation, role) if index.isValid() else None
+        return super().headerData(section, orientation, role)
+
     def __init__(self, page):
         super().__init__(page)
         self.page = page
@@ -184,7 +202,9 @@ class RecordPage(QWidget):
         self.table.setAlternatingRowColors(True)
         self.table.setWordWrap(False)
         self.table.verticalHeader().setDefaultSectionSize(40)
-        self.table.verticalHeader().hide()
+        self.table.verticalHeader().setMinimumWidth(72)
+        self.table.verticalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.table.verticalHeader().setToolTip(tr("row_number", lang, number="1, 2, …"))
         self.table.setShowGrid(True)
         self.table.setGridStyle(Qt.PenStyle.SolidLine)
         for col, size in enumerate((120, 280, 300, 165, 112)):
@@ -338,6 +358,17 @@ class RecordPage(QWidget):
             relation_columns.addLayout(column)
         relation_layout.addLayout(relation_columns)
         details.addWidget(self.relation_panel)
+        bookmark_row = QHBoxLayout()
+        self.bookmark_toggle = QCheckBox(tr("bookmark", lang))
+        self.bookmark_toggle.setToolTip(tr("bookmark_help", lang))
+        self.bookmark_toggle.toggled.connect(self.toggle_bookmark)
+        bookmark_row.addWidget(self.bookmark_toggle)
+        self.bookmark_note = QLineEdit()
+        self.bookmark_note.setPlaceholderText(tr("bookmark_note", lang))
+        self.bookmark_note.setToolTip(tr("bookmark_help", lang))
+        self.bookmark_note.textEdited.connect(self.edit_bookmark_note)
+        bookmark_row.addWidget(self.bookmark_note, 1)
+        details.insertLayout(3, bookmark_row)
         if tab["type"] == "text":
             self.screenshots = ContextScreenshots(owner)
             details.addWidget(self.screenshots)
@@ -371,6 +402,7 @@ class RecordPage(QWidget):
         self.current_id = self.model.entries[index.row()]["id"] if index.isValid() else None
         self.detail_widget.setEnabled(self.current_id is not None)
         if self.current_id is None:
+            self.update_bookmark()
             self.entry_label.clear()
             self.context_label.clear()
             self.comment_label.clear()
@@ -404,6 +436,24 @@ class RecordPage(QWidget):
             self.model.setData(self.model.index(self.model.row_by_id[self.current_id], 2),
                                self.target_editor.toPlainText())
 
+    def update_bookmark(self):
+        bookmark = self.owner.bookmark(self.tab["id"], self.current_id) if self.current_id else None
+        self.bookmark_toggle.blockSignals(True)
+        self.bookmark_toggle.setChecked(bookmark is not None)
+        self.bookmark_toggle.blockSignals(False)
+        self.bookmark_note.setVisible(bookmark is not None)
+        note = bookmark["note"] if bookmark else ""
+        if self.bookmark_note.text() != note:
+            self.bookmark_note.setText(note)
+
+    def toggle_bookmark(self, enabled):
+        if self.current_id:
+            self.owner.set_bookmark(self.tab["id"], self.current_id, enabled, self.bookmark_note.text())
+
+    def edit_bookmark_note(self, text):
+        if self.current_id and self.bookmark_toggle.isChecked():
+            self.owner.set_bookmark(self.tab["id"], self.current_id, True, text)
+
     def set_null(self):
         if self.current_id:
             self.model.setData(self.model.index(self.model.row_by_id[self.current_id], 2), None)
@@ -424,7 +474,9 @@ class RecordPage(QWidget):
             return
         project, lang = self.owner.project, self.owner.language
         entry = project.entries[self.tab["id"]][self.current_id]
-        self.entry_label.setText(entry["id"])
+        self.entry_label.setText(tr("row_number", lang, number=self.model.row_by_id[self.current_id] + 1)
+                                 + " · ID: " + entry["id"])
+        self.update_bookmark()
         for key, widget in (("context", self.context_label), ("comment", self.comment_label)):
             value = entry.get(key, "")
             widget.setText(tr(key, lang) + ": " + value if value else "")

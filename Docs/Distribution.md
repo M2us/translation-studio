@@ -40,8 +40,8 @@ The portable app includes the windowed EXE and `_internal`, the console CLI/work
 
 The packager excludes an incompatible unversioned ICU DLL sometimes collected from an unrelated runtime; the tested Qt build needs the Windows ICU API. Keep the exclusion check and verify actual executables after dependency changes. Third-party license files and installed dependency versions are collected under `ThirdParty`.
 
-## Future public release
+## Public releases
 
-The maintainer has assigned application version 1.0. The canonical version is `Source/translation_studio/__init__.py`; the CLI exposes it through `--version`, Qt records it as the application version, and builds embed it in Windows EXE file/product properties (numeric 1.0.0.0). The project uses the [MIT License](../LICENSE), copyright (c) 2026 M2us. Include the root license in both source and portable distributions; preserve third-party notices under their own terms. `schemaVersion: 1` remains the independent data-contract version.
+The current application version is **1.01**, with GitHub tag `v1.01`. The canonical version is `Source/translation_studio/__init__.py`; the CLI exposes it through `--version`, Qt records it as the application version, and builds embed the exact public string **1.01** in Windows EXE file/product properties. Windows' four numeric components are **1.1.0.0**, since a numeric component cannot preserve a leading zero; this does not rename the public release. The project uses the [MIT License](../LICENSE), copyright (c) 2026 M2us. Include the root license in both source and portable distributions; preserve third-party notices under their own terms. `schemaVersion: 1` remains the independent data-contract version.
 
 Document supported Windows versions based on actual tests, retain dependency notices, run checks from a clean source copy and test the portable build on a clean machine. The current app is unsigned and has no installer. Upload source through Git and portable binaries/checksums as release assets; do not commit venvs, logs, drafts, game ROMs or generated binaries.

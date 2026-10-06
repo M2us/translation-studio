@@ -16,6 +16,7 @@ If working on the editor, read [Architecture](Architecture.md), inspect the affe
 | Why does preview differ from selected image? | ProjectFormat, UserGuide | views.py, core.py asset_side/set_variant |
 | What can be recovered or deleted? | StorageDiagnostics | core.py snapshot/save/restore methods |
 | Where are preferences/logs? | StorageDiagnostics | settings.py, diagnostics.py, processes.py |
+| How do row numbers/bookmarks persist? | UserGuide, StorageDiagnostics, Architecture | bookmarks.py, gui.py, views.py |
 | How do buttons run/cancel? | BuildIntegration | processes.py, gui.py |
 | Which language is the default? | UserGuide, API, Architecture | gui.py, cli.py, i18n.py, core.py |
 | How is the app shipped? | Distribution | Scripts/build.py, verify_package.py, verify_archive.py |

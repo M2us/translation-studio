@@ -19,8 +19,19 @@ from .processes import ActionRunner, trust_key
 from .views import RecordPage
 from .settings import app_root, profile_path, logs_path
 from . import diagnostics, theme
+from . import bookmarks
 
 TEXT.update({
+    "bookmark": ("Закладка", "Bookmark"),
+    "bookmark_note": ("Личная заметка к закладке", "Personal bookmark note"),
+    "bookmarks": ("Закладки ({count})", "Bookmarks ({count})"),
+    "bookmark_previous": ("Предыдущая закладка", "Previous bookmark"),
+    "bookmark_next": ("Следующая закладка", "Next bookmark"),
+    "bookmark_remove": ("Удалить выбранную закладку", "Remove selected bookmark"),
+    "bookmark_missing": ("Запись недоступна", "Record unavailable"),
+    "row_number": ("Строка {number}", "Row {number}"),
+    "bookmark_help": ("Личная закладка сохраняется автоматически и не участвует в сборке игры.",
+                      "Personal bookmarks save automatically and do not affect game builds."),
     "loading": ("Загрузка проекта…", "Loading project…"),
     "examples": ("Примеры", "Examples"),
     "note": ("Моя заметка к переводу", "My translation note"),
@@ -127,9 +138,11 @@ class MainWindow(QMainWindow):
             self.profile["uiLanguage"] = self.language
             self.profile["theme"] = self.theme
             atomic_write(profile_path(), self.profile)
+            return True
         except (OSError, StudioError) as error:
             diagnostics.error(error)
             self.statusBar().showMessage(self.msg("profile_error", detail=str(error)))
+            return False
 
     def build_shell(self):
         old = self.takeCentralWidget()
@@ -140,6 +153,9 @@ class MainWindow(QMainWindow):
                 child.blockSignals(True)
             old.deleteLater()
         self.pages = {}
+        self.bookmark_order = {(tab, entry["id"]): (t, r) for t, (tab, document) in enumerate(
+            self.project.documents.items() if self.project else []) for r, entry in enumerate(document["entries"])}
+        self.bookmark_lookup = {(item["tab"], item["entry"]): item for item in self.bookmark_records()}
         shell = QWidget()
         shell.setObjectName("Workspace")
         outer = QHBoxLayout(shell)
@@ -322,6 +338,31 @@ class MainWindow(QMainWindow):
                 self.action_buttons.append(button)
         self.actions_bar.addStretch()
         body.addLayout(self.actions_bar)
+        self.bookmark_bar = QWidget()
+        bookmark_layout = QHBoxLayout(self.bookmark_bar)
+        bookmark_layout.setContentsMargins(0, 0, 0, 0)
+        self.bookmark_count = QLabel()
+        bookmark_layout.addWidget(self.bookmark_count)
+        self.bookmark_choice = QComboBox()
+        self.bookmark_choice.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.bookmark_choice.setMinimumContentsLength(12)
+        self.bookmark_choice.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.bookmark_choice.activated.connect(self.open_bookmark)
+        bookmark_layout.addWidget(self.bookmark_choice, 1)
+        self.bookmark_navigation = []
+        for text, direction in (("‹", -1), ("›", 1)):
+            button = QToolButton()
+            button.setText(text)
+            button.setToolTip(self.msg("bookmark_previous" if direction < 0 else "bookmark_next"))
+            button.clicked.connect(lambda _, d=direction: self.navigate_bookmark(d))
+            bookmark_layout.addWidget(button)
+            self.bookmark_navigation.append(button)
+        remove = QToolButton()
+        remove.setText("×")
+        remove.setToolTip(self.msg("bookmark_remove"))
+        remove.clicked.connect(self.remove_selected_bookmark)
+        bookmark_layout.addWidget(remove)
+        body.addWidget(self.bookmark_bar)
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.tabBar().setDrawBase(False)
@@ -372,6 +413,7 @@ class MainWindow(QMainWindow):
         self.notice.setVisible(bool(self.notice.text()))
         outer.addWidget(main, 1)
         self.setCentralWidget(shell)
+        self.refresh_bookmarks()
         if hasattr(self, "dock"):
             self.dock.setWindowTitle(self.msg("log"))
             self.cancel_button.setText(self.msg("cancel"))
@@ -405,6 +447,95 @@ class MainWindow(QMainWindow):
     def preserve_view(self):
         return {"tab": self.tabs.currentIndex(), "entries": {k: p.current_id for k, p in self.pages.items()}}
 
+    def bookmark_records(self):
+        return bookmarks.records(self.profile, self.project) if self.project else []
+
+    def bookmark(self, tab, entry):
+        return self.bookmark_lookup.get((tab, entry))
+
+    def set_bookmark(self, tab, entry, enabled, note=""):
+        if not self.project:
+            return
+        previous = self.profile.get("bookmarks", {})
+        groups = dict(previous) if isinstance(previous, dict) else {}
+        values = [item for item in self.bookmark_records()
+                  if (item["tab"], item["entry"]) != (tab, entry)]
+        if enabled:
+            values.append({"tab": tab, "entry": entry, "note": note})
+        key = bookmarks.project_key(self.project)
+        if values:
+            groups[key] = values
+        else:
+            groups.pop(key, None)
+        self.profile["bookmarks"] = groups
+        if not self.write_profile():
+            self.profile["bookmarks"] = previous
+        self.refresh_bookmarks()
+        for page in self.pages.values():
+            if page.model.rowCount():
+                page.model.headerDataChanged.emit(Qt.Orientation.Vertical, 0, page.model.rowCount() - 1)
+            page.update_bookmark()
+
+    def refresh_bookmarks(self):
+        values = self.bookmark_records()
+        self.bookmark_lookup = {(item["tab"], item["entry"]): item for item in values}
+        previous = self.bookmark_choice.currentData()
+        order = self.bookmark_order
+        values.sort(key=lambda item: order.get((item["tab"], item["entry"]), (len(order), 0)))
+        self.bookmark_choice.clear()
+        for item in values:
+            tab, entry = item["tab"], item["entry"]
+            position = order.get((tab, entry))
+            name = label(self.project.tabs[tab], self.language) if tab in self.project.tabs else tab
+            row = self.msg("row_number", number=position[1] + 1) if position else self.msg("bookmark_missing")
+            title = f"{name} · {row} · {item['note'] or entry}"
+            self.bookmark_choice.addItem(title, (tab, entry))
+            self.bookmark_choice.setItemData(self.bookmark_choice.count() - 1, title, Qt.ItemDataRole.ToolTipRole)
+        self.bookmark_choice.setCurrentIndex(max(0, self.bookmark_index(previous)))
+        self.bookmark_count.setText(self.msg("bookmarks", count=len(values)))
+        self.bookmark_bar.setVisible(bool(values))
+        for button in self.bookmark_navigation:
+            button.setEnabled(any((item["tab"], item["entry"]) in order for item in values))
+
+    def open_bookmark(self, index):
+        if self.running:
+            return
+        key = self.bookmark_choice.itemData(index)
+        if not key:
+            return
+        page = self.pages.get(key[0])
+        if page and key[1] in page.model.row_by_id:
+            self.tabs.setCurrentWidget(page)
+            page.select_id(key[1])
+            self.bookmark_choice.setCurrentIndex(index)
+        else:
+            self.statusBar().showMessage(self.msg("bookmark_missing"), 5000)
+
+    def bookmark_index(self, key):
+        # Qt may return stored Python tuples as lists. Compare normalized keys.
+        if key:
+            for index in range(self.bookmark_choice.count()):
+                if tuple(self.bookmark_choice.itemData(index)) == tuple(key):
+                    return index
+        return -1
+
+    def navigate_bookmark(self, direction):
+        page = self.tabs.currentWidget()
+        key = (page.tab["id"], page.current_id) if isinstance(page, RecordPage) else None
+        start = self.bookmark_index(key)
+        count = self.bookmark_choice.count()
+        for step in range(1, count + 1):
+            index = (start + direction * step) % count if start >= 0 else (step - 1 if direction > 0 else count - step)
+            tab, entry = self.bookmark_choice.itemData(index)
+            if tab in self.pages and entry in self.pages[tab].model.row_by_id:
+                self.open_bookmark(index)
+                return
+
+    def remove_selected_bookmark(self):
+        key = self.bookmark_choice.currentData()
+        if key:
+            self.set_bookmark(*key, False)
+
     def refresh_current(self):
         page = self.tabs.currentWidget()
         if isinstance(page, RecordPage):
@@ -433,6 +564,7 @@ class MainWindow(QMainWindow):
         for page in self.pages.values():
             page.update_details()
             page.table.viewport().update()
+            page.table.verticalHeader().viewport().update()
         self.dirty_changed()
 
     def tab_changed(self, index):

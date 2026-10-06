@@ -32,6 +32,18 @@ Use **Translation language** at the top right to choose a target language. Edits
 
 **Mark untranslated** sets the value to `null`. An intentionally empty string is different: clear the lower translation field. Empty strings are allowed only with `allowEmpty: true`. Incomplete translations can be saved, although a builder may require every record it uses to be translated.
 
+## Row numbers and personal bookmarks
+
+The left table margin shows **catalog row numbers**, starting at 1 within each tab. Searching and sorting preserve those numbers. They indicate the original catalog order, not a game ID; reordering a catalog may change them. The selected record also shows its row number beside its stable ID.
+
+Select a record and enable **Bookmark** in the detail panel. A flag appears beside its number. Optionally enter a **Personal bookmark note**, such as “Continue here tomorrow” or “Check this wording”. Each change saves automatically; **Save** is not needed. Multiple records can be marked in text, audio and image tabs.
+
+When this project has bookmarks, a **Bookmarks** bar appears above the tabs. Choose an item in its list to open that record, or use **Previous bookmark** / **Next bookmark**. Navigation follows catalog order across tabs and wraps at the ends. It clears the destination tab's search and filter so the record can be shown. Uncheck **Bookmark** to remove a flag, or use the bar's **×** to remove its selected item.
+
+Bookmarks are personal settings in the portable folder's `Data/profile.json`, keyed by the game folder, tab and stable record ID. They survive closing the project and restarting the app, are shared between target languages, and are available even when game catalogs are read-only. They do not change translations, translator notes, recovery snapshots or builder input. Notes are not written to application logs. Keep `Data` when replacing a portable installation; moving a game folder does not automatically move its bookmarks.
+
+If a bookmarked record disappears, its note remains in the list as **Record unavailable**. Previous/next skips it; remove it with **×** when no longer needed. A profile write failure is reported in the status bar and the editor restores the previous bookmark state.
+
 ## Constraints and errors
 
 The **Characters** counter shows usage and any limit, for example `54 / 20`, followed by a readable error when the limit is exceeded. Its tooltip explains that it counts Unicode code points, including spaces, tags and line breaks. A combined visible character may use several units. A configured byte limit is shown separately and includes the declared terminator.

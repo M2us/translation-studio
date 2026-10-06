@@ -95,6 +95,9 @@ def main():
         profile = package / "Data/profile.json" if args.portable_profile else session / (variant + "-profile.json")
         settings = json.loads(profile.read_text(encoding="utf-8"))
         assert settings["theme"] == "dark" and settings["uiLanguage"] == "en"
+        bookmarks = settings["bookmarks"][str(game.resolve()).casefold()]
+        assert len(bookmarks) == 2
+        assert {item["note"] for item in bookmarks} == {"Private bookmark smoke note", "Resume work"}
         recovery = game / "Work/TranslationStudio/Recovery"
         assert (recovery / "previous.json").is_file() and not (recovery / "draft.json").exists()
     logs = (package / "Data" if args.portable_profile else session) / "Logs"
@@ -104,6 +107,7 @@ def main():
         text = path.read_text(encoding="utf-8")
         assert '"save.complete"' in text and '"application.exit"' in text
         assert "Пуск" not in text
+        assert "Private bookmark smoke note" not in text and "Resume work" not in text
     result["portableProfile"] = args.portable_profile
     result["package"] = str(package)
     (ROOT / "Work/QA/package-result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

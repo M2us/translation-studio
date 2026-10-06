@@ -4,9 +4,11 @@
 
 Версия 1.0 — первый выпуск, 6 октября 2026 года. Изменения и ограничения описаны в [CHANGELOG.md](CHANGELOG.md).
 
+Версия **1.01** добавляет номера записей и личные закладки с заметками и быстрыми переходами.
+
 [English](README.md) · [Руководство пользователя](Docs/UserGuide.ru.md)
 
-**[Скачать portable 1.0 для Windows](https://github.com/M2us/translation-studio/releases/download/v1.0/Translation-Studio-Windows-Portable.zip)** · [Все выпуски](https://github.com/M2us/translation-studio/releases) · [SHA-256](https://github.com/M2us/translation-studio/releases/download/v1.0/Portable-SHA256.txt)
+**[Скачать portable 1.01 для Windows](https://github.com/M2us/translation-studio/releases/download/v1.01/Translation-Studio-Windows-Portable.zip)** · [Все выпуски](https://github.com/M2us/translation-studio/releases) · [SHA-256](https://github.com/M2us/translation-studio/releases/download/v1.01/Portable-SHA256.txt)
 
 Автоматические архивы GitHub **Source code** содержат исходники; для запуска скачивайте portable ZIP.
 
