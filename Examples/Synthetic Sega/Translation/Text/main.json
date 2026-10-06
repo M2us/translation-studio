@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "datasetId": "main",
+  "sourceLanguage": "en",
+  "languages": [
+    "en",
+    "ru"
+  ],
+  "sourceRevision": "7978023eb7816d1779d12e4a1ee59e4ce2b92c9ed2a56c89ca6cd8051bd86017",
+  "entries": [
+    {
+      "id": "7842b9b3-0936-45df-918c-4591a64795f4",
+      "texts": {
+        "en": "Start game",
+        "ru": "Начать игру"
+      },
+      "context": "Main menu",
+      "comment": "Start button on the main screen.",
+      "group": "Menu",
+      "constraintsByLanguage": {
+        "ru": {
+          "maxCodePoints": 20,
+          "forbiddenCharacters": "^~"
+        }
+      },
+      "extensions": {
+        "recordIndex": 0,
+        "encoding": "utf-16le"
+      },
+      "screenshots": [
+        {
+          "path": "Translation/Context/main-menu.png",
+          "caption": "Synthetic main-menu screenshot"
+        }
+      ]
+    },
+    {
+      "id": "b0b65b63-185c-4d55-a36f-812b647646cd",
+      "texts": {
+        "en": "Targets: {0}",
+        "ru": "Цели: {0}"
+      },
+      "context": "Remaining target count",
+      "comment": "HUD counter; not character dialogue.",
+      "group": "Mission",
+      "notes": {
+        "ru": "Сохранить параметр количества"
+      },
+      "constraintsByLanguage": {
+        "ru": {
+          "requiredTokens": [
+            {
+              "token": "{0}",
+              "count": 1
+            }
+          ],
+          "byteLimit": {
+            "maxBytes": 64,
+            "encoding": "utf-8",
+            "terminatorBytes": 1
+          }
+        }
+      },
+      "extensions": {
+        "recordIndex": 1,
+        "encoding": "utf-16le"
+      }
+    }
+  ],
+  "extensions": {
+    "game": {
+      "resource": "example-dialog-table"
+    }
+  }
+}

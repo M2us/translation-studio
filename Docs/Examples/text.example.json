@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "datasetId": "main",
+  "sourceLanguage": "en",
+  "languages": [
+    "en",
+    "ru",
+    "de"
+  ],
+  "sourceRevision": "d48d7ba5fb146b650b59439a146eb2cb985b345a3ee8cd0b14304032fc67c898",
+  "entries": [
+    {
+      "id": "7842b9b3-0936-45df-918c-4591a64795f4",
+      "texts": {
+        "en": "Start game",
+        "ru": "Начать игру",
+        "de": "Spiel starten"
+      },
+      "context": "Main menu",
+      "comment": "Start button on the main screen.",
+      "screenshots": [
+        {
+          "path": "Translation/Context/main-menu.png",
+          "caption": "Synthetic main-menu screenshot"
+        }
+      ],
+      "group": "Menu",
+      "constraintsByLanguage": {
+        "ru": {
+          "maxCodePoints": 20,
+          "forbiddenCharacters": "^~"
+        },
+        "de": {
+          "maxCodePoints": 20
+        }
+      },
+      "extensions": {
+        "game": {
+          "binding": {
+            "table": "menu",
+            "index": 0,
+            "offset": 8192
+          },
+          "flags": {
+            "appendTerminator": true,
+            "speaker": null
+          },
+          "opaqueNumber": 9007199254740993
+        }
+      }
+    },
+    {
+      "id": "b0b65b63-185c-4d55-a36f-812b647646cd",
+      "texts": {
+        "en": "Targets: {0}",
+        "ru": "Цели: {0}",
+        "de": null
+      },
+      "context": "Remaining target count",
+      "comment": "HUD counter; not character dialogue.",
+      "group": "Mission",
+      "notes": {
+        "ru": "Сохранить параметр количества"
+      },
+      "constraintsByLanguage": {
+        "ru": {
+          "requiredTokens": [
+            {
+              "token": "{0}",
+              "count": 1
+            }
+          ],
+          "byteLimit": {
+            "maxBytes": 64,
+            "encoding": "utf-8",
+            "terminatorBytes": 1
+          }
+        }
+      },
+      "extensions": {
+        "game": {
+          "binding": {
+            "table": "mission",
+            "index": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "d835d7f4-c7c0-42ac-b3e2-0253114949e9",
+      "texts": {
+        "en": "Restricted area",
+        "ru": "Вход запрещён",
+        "de": null
+      },
+      "context": "Sign beside the door"
+    },
+    {
+      "id": "728dcc4a-0bce-45b4-9e6a-3371d19b5d8c",
+      "texts": {
+        "en": "Maybe",
+        "ru": "Возможно",
+        "de": null
+      },
+      "comment": "Shared opening fragment of two introductory lines, spoken by the commander."
+    },
+    {
+      "id": "21fd0cd2-e57b-41be-978d-f714a2468186",
+      "texts": {
+        "en": "something happened",
+        "ru": "что-то произошло",
+        "de": null
+      },
+      "comment": "Second fragment of the discovery line; order is defined in the relations catalog."
+    },
+    {
+      "id": "bbb8a3db-8bb8-4d49-9334-3b6b52e12ab7",
+      "texts": {
+        "en": "it was a noise",
+        "ru": "это был шум",
+        "de": null
+      },
+      "comment": "Alternative continuation of the same opening fragment."
+    },
+    {
+      "id": "9949a313-7c55-46fb-b0c7-6ca33239e552",
+      "texts": {
+        "en": "Maybe",
+        "ru": "Возможно",
+        "de": null
+      },
+      "comment": "Separate resource with the same word, spoken by another character. Keep the IDs distinct."
+    }
+  ],
+  "extensions": {
+    "game": {
+      "resource": "example-dialog-table"
+    }
+  }
+}

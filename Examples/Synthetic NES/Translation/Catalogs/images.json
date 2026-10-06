@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "images",
+  "sourceLanguage": "en",
+  "languages": [
+    "en",
+    "ru",
+    "de"
+  ],
+  "entries": [
+    {
+      "id": "texture.wall-sign",
+      "label": "Wall sign",
+      "context": "Comparison of text embedded in an image",
+      "comment": "Sign beside the door; compare wording and text placement.",
+      "assets": {
+        "en": {
+          "previewPath": "Extracted/Preview/Images/wall-sign.png"
+        },
+        "ru": {
+          "selectedVariantId": "standard",
+          "variants": [
+            {
+              "id": "standard",
+              "label": "Standard",
+              "comment": "Full wording on two lines.",
+              "previewPath": "Translation/Images/wall-sign.png",
+              "assetPath": "Translation/Images/wall-sign.png"
+            },
+            {
+              "id": "compact",
+              "label": "Compact wording",
+              "comment": "Alternative wording for comparison.",
+              "previewPath": "Translation/Images/wall-sign-compact.png",
+              "assetPath": "Translation/Images/wall-sign-compact.png"
+            }
+          ]
+        },
+        "de": null
+      }
+    }
+  ]
+}

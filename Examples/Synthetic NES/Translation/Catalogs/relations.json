@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "groups": [
+    {
+      "id": "sentence-event",
+      "type": "textSequence",
+      "label": "Line about an event",
+      "labels": {
+        "ru": "Реплика о происшествии",
+        "en": "Line about an event"
+      },
+      "comment": "Complete commander line stored as two independent text resources.",
+      "parts": [
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "728dcc4a-0bce-45b4-9e6a-3371d19b5d8c"
+          }
+        },
+        {
+          "literal": ", "
+        },
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "21fd0cd2-e57b-41be-978d-f714a2468186"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sentence-noise",
+      "type": "textSequence",
+      "label": "Alternative line",
+      "comment": "Reuses the first ID: the same record, not a duplicate translation.",
+      "parts": [
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "728dcc4a-0bce-45b4-9e6a-3371d19b5d8c"
+          }
+        },
+        {
+          "literal": ", "
+        },
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "bbb8a3db-8bb8-4d49-9334-3b6b52e12ab7"
+          }
+        }
+      ],
+      "partsByLanguage": {
+        "ru": [
+          {
+            "ref": {
+              "tabId": "text",
+              "entryId": "728dcc4a-0bce-45b4-9e6a-3371d19b5d8c"
+            }
+          },
+          {
+            "literal": ", "
+          },
+          {
+            "ref": {
+              "tabId": "text",
+              "entryId": "bbb8a3db-8bb8-4d49-9334-3b6b52e12ab7"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "sentence-other-speaker",
+      "type": "textSequence",
+      "label": "Another character's line",
+      "comment": "The first word matches other groups but comes from a distinct custom ID.",
+      "parts": [
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "9949a313-7c55-46fb-b0c7-6ca33239e552"
+          }
+        },
+        {
+          "literal": ", "
+        },
+        {
+          "ref": {
+            "tabId": "text",
+            "entryId": "21fd0cd2-e57b-41be-978d-f714a2468186"
+          }
+        }
+      ]
+    },
+    {
+      "id": "story-intro-complete",
+      "type": "audioSequence",
+      "label": "Full story",
+      "labels": {
+        "ru": "Рассказ целиком",
+        "en": "Full story"
+      },
+      "comment": "Three fragments played sequentially after each file ends.",
+      "parts": [
+        {
+          "ref": {
+            "tabId": "voice",
+            "entryId": "voice.intro.001"
+          }
+        },
+        {
+          "ref": {
+            "tabId": "voice",
+            "entryId": "voice.intro.002"
+          },
+          "pauseAfterMs": 100
+        },
+        {
+          "ref": {
+            "tabId": "voice",
+            "entryId": "voice.intro.003"
+          }
+        }
+      ]
+    },
+    {
+      "id": "story-incomplete-translation",
+      "type": "audioSequence",
+      "label": "Story with a missing translation",
+      "comment": "The Russian queue is unavailable: the fourth fragment has assets.ru set to null.",
+      "parts": [
+        {
+          "ref": {
+            "tabId": "voice",
+            "entryId": "voice.intro.001"
+          }
+        },
+        {
+          "ref": {
+            "tabId": "voice",
+            "entryId": "voice.intro.004"
+          }
+        }
+      ]
+    }
+  ]
+}

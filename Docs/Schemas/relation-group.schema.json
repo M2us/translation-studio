@@ -1,0 +1,270 @@
+{
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "textSequence"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "ru": {
+              "type": "string",
+              "minLength": 1
+            },
+            "en": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "comment": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "ref": {
+                    "type": "object",
+                    "properties": {
+                      "tabId": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "tabId",
+                      "entryId"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "ref"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "literal": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "literal"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "minItems": 2
+        },
+        "partsByLanguage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "ref": {
+                      "type": "object",
+                      "properties": {
+                        "tabId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "entryId": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "tabId",
+                        "entryId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "ref"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "literal": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "literal"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "minItems": 2
+          },
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "extensions": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "label",
+        "parts"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "audioSequence"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "labels": {
+          "type": "object",
+          "properties": {
+            "ru": {
+              "type": "string",
+              "minLength": 1
+            },
+            "en": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "comment": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "type": "object",
+                "properties": {
+                  "tabId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "entryId": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "tabId",
+                  "entryId"
+                ],
+                "additionalProperties": false
+              },
+              "pauseAfterMs": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "ref"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2
+        },
+        "partsByLanguage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "object",
+                  "properties": {
+                    "tabId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "entryId": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "tabId",
+                    "entryId"
+                  ],
+                  "additionalProperties": false
+                },
+                "pauseAfterMs": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "ref"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "extensions": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "label",
+        "parts"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Translation Studio relation-group (schema 1)"
+}

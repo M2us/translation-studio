@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "projectId": "synthetic-nes",
+  "name": "Synthetic NES",
+  "sourceLanguage": "en",
+  "targetLanguages": [
+    "ru",
+    "de"
+  ],
+  "relationsPath": "Translation/Catalogs/relations.json",
+  "tabs": [
+    {
+      "id": "text",
+      "type": "text",
+      "label": "Text",
+      "labels": {
+        "ru": "Текст",
+        "en": "Text"
+      },
+      "datasetId": "main",
+      "catalogPath": "Translation/Text/main.json",
+      "defaultsByLanguage": {
+        "ru": {
+          "allowEmpty": false
+        },
+        "de": {
+          "allowEmpty": false
+        }
+      }
+    },
+    {
+      "id": "voice",
+      "type": "audio",
+      "label": "Voice",
+      "labels": {
+        "ru": "Озвучка",
+        "en": "Voice"
+      },
+      "catalogPath": "Translation/Catalogs/audio.json"
+    },
+    {
+      "id": "art",
+      "type": "images",
+      "label": "Images",
+      "labels": {
+        "ru": "Изображения",
+        "en": "Images"
+      },
+      "catalogPath": "Translation/Catalogs/images.json"
+    }
+  ],
+  "actions": [
+    {
+      "id": "build-patch",
+      "label": "Rebuild patch",
+      "labels": {
+        "ru": "Пересобрать патч",
+        "en": "Rebuild patch"
+      },
+      "kind": "build",
+      "executable": "Tools/DemoBuilder.exe",
+      "arguments": [
+        "--language",
+        "ru"
+      ],
+      "workingDirectory": ".",
+      "requiresSaved": true,
+      "requiresComplete": true,
+      "datasetIds": [
+        "main"
+      ],
+      "targetLanguage": "ru",
+      "outputs": [
+        "Builds/Patch"
+      ]
+    }
+  ],
+  "extensions": {
+    "demoFormat": "nes"
+  }
+}

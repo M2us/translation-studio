@@ -1,0 +1,261 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "datasetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceLanguage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 2,
+      "uniqueItems": true
+    },
+    "sourceRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "texts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "context": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "constraintsByLanguage": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "allowEmpty": {
+                  "type": "boolean"
+                },
+                "maxCodePoints": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "maxLines": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "lineBreakToken": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "byteLimit": {
+                  "type": "object",
+                  "properties": {
+                    "maxBytes": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "encoding": {
+                      "enum": [
+                        "utf-8",
+                        "utf-16le"
+                      ]
+                    },
+                    "terminatorBytes": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "maxBytes",
+                    "encoding",
+                    "terminatorBytes"
+                  ],
+                  "additionalProperties": false
+                },
+                "requiredTokens": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "token": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "count": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "required": [
+                      "token",
+                      "count"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 0
+                },
+                "allowedCharacters": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "forbiddenCharacters": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "object",
+                  "properties": {
+                    "allowEmpty": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "maxCodePoints": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "maxLines": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "lineBreakToken": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "byteLimit": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "requiredTokens": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "allowedCharacters": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    },
+                    "forbiddenCharacters": {
+                      "enum": [
+                        "error",
+                        "warning"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "screenshots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "caption": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "extensions": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "texts"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "datasetId",
+    "sourceLanguage",
+    "languages",
+    "sourceRevision",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Translation Studio text (schema 1)"
+}

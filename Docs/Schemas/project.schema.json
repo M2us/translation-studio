@@ -1,0 +1,390 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "projectId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceLanguage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "targetLanguages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tabs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "const": "text"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "labels": {
+                "type": "object",
+                "properties": {
+                  "ru": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              },
+              "catalogPath": {
+                "type": "string",
+                "minLength": 1
+              },
+              "datasetId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "defaultsByLanguage": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "allowEmpty": {
+                      "type": "boolean"
+                    },
+                    "maxCodePoints": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "maxLines": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0
+                    },
+                    "lineBreakToken": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "byteLimit": {
+                      "type": "object",
+                      "properties": {
+                        "maxBytes": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "encoding": {
+                          "enum": [
+                            "utf-8",
+                            "utf-16le"
+                          ]
+                        },
+                        "terminatorBytes": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "maxBytes",
+                        "encoding",
+                        "terminatorBytes"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "requiredTokens": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "token": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "token",
+                          "count"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 0
+                    },
+                    "allowedCharacters": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "forbiddenCharacters": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "object",
+                      "properties": {
+                        "allowEmpty": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "maxCodePoints": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "maxLines": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "lineBreakToken": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "byteLimit": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "requiredTokens": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "allowedCharacters": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        },
+                        "forbiddenCharacters": {
+                          "enum": [
+                            "error",
+                            "warning"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "label",
+              "catalogPath",
+              "datasetId"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "enum": [
+                  "audio",
+                  "images"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "labels": {
+                "type": "object",
+                "properties": {
+                  "ru": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              },
+              "catalogPath": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "label",
+              "catalogPath"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "minItems": 1
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "labels": {
+            "type": "object",
+            "properties": {
+              "ru": {
+                "type": "string",
+                "minLength": 1
+              },
+              "en": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "kind": {
+            "enum": [
+              "build",
+              "validate"
+            ]
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0
+          },
+          "workingDirectory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputEncoding": {
+            "enum": [
+              "utf-8",
+              "utf-8-sig",
+              "cp1251",
+              "cp866"
+            ]
+          },
+          "requiresSaved": {
+            "const": true
+          },
+          "requiresComplete": {
+            "type": "boolean"
+          },
+          "datasetIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "targetLanguage": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "kind",
+          "executable",
+          "arguments",
+          "workingDirectory",
+          "requiresSaved",
+          "requiresComplete",
+          "datasetIds",
+          "targetLanguage"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "relationsPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "projectId",
+    "name",
+    "sourceLanguage",
+    "targetLanguages",
+    "tabs"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Translation Studio project (schema 1)"
+}

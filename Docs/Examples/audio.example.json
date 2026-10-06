@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "audio",
+  "sourceLanguage": "en",
+  "languages": [
+    "en",
+    "ru",
+    "de"
+  ],
+  "entries": [
+    {
+      "id": "voice.intro.001",
+      "label": "Opening narration",
+      "comment": "First part of the commander's story.",
+      "assets": {
+        "en": {
+          "previewPath": "Extracted/Preview/Audio/intro-001.wav"
+        },
+        "ru": {
+          "previewPath": "Translation/Audio/intro-001.wav",
+          "assetPath": "Translation/Audio/intro-001.wav"
+        },
+        "de": null
+      }
+    },
+    {
+      "id": "voice.intro.002",
+      "label": "Story, part two",
+      "comment": "Continuation of intro.001, explicitly connected by this synthetic example.",
+      "assets": {
+        "en": {
+          "previewPath": "Extracted/Preview/Audio/intro-002.wav"
+        },
+        "ru": {
+          "previewPath": "Translation/Audio/intro-002.wav",
+          "assetPath": "Translation/Audio/intro-002.wav"
+        },
+        "de": null
+      }
+    },
+    {
+      "id": "voice.intro.003",
+      "label": "Story, part three",
+      "assets": {
+        "en": {
+          "previewPath": "Extracted/Preview/Audio/intro-003.wav"
+        },
+        "ru": {
+          "previewPath": "Translation/Audio/intro-003.wav",
+          "assetPath": "Translation/Audio/intro-003.wav"
+        },
+        "de": null
+      }
+    },
+    {
+      "id": "voice.intro.004",
+      "label": "Line without Russian audio",
+      "assets": {
+        "en": {
+          "previewPath": "Extracted/Preview/Audio/intro-004.wav"
+        },
+        "ru": null,
+        "de": null
+      }
+    }
+  ]
+}
